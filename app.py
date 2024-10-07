@@ -1,17 +1,88 @@
 from chat_history import chat_history_manager
 from agent import Agent
-from prompts import PROMPTS_VERSION_ONE, PROMPTS_VERSION_TWO
+from prompts import PROMPTS_VERSION_ONE, PROMPTS_VERSION_TWO, DATA_ANALYST_PROMPT
 from css.custom_css import inject_custom_css
 from dotenv import load_dotenv
 import streamlit as st
 import uuid
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import os
 
 load_dotenv()
+
+@st.cache_data
+def load_data():
+    # Get the directory of the current script
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # Construct the path to the documents folder
+    documents_dir = os.path.join(current_dir, 'documents')
+    
+    # Construct the full path to the order_details.csv file
+    csv_file_path = os.path.join(documents_dir, 'order_details.csv')
+    
+    # Read the CSV file
+    return pd.read_csv(csv_file_path)
+
+df = load_data()
+
+def generate_plot(plot_type, data):
+    fig, ax = plt.subplots(figsize=(10, 6))
+    
+    if plot_type == "Category Sales":
+        category_sales = data.groupby('Category')['Total_Sale'].sum().sort_values(ascending=False)
+        sns.barplot(x=category_sales.index, y=category_sales.values, ax=ax)
+        ax.set_title('Total Sales by Category')
+        ax.set_xlabel('Category')
+        ax.set_ylabel('Total Sales ($)')
+        plt.xticks(rotation=45)
+    
+    elif plot_type == "Marketing Channels":
+        channel_counts = data['Marketing_Channel'].value_counts()
+        ax.pie(channel_counts, labels=channel_counts.index, autopct='%1.1f%%')
+        ax.set_title('Distribution of Orders by Marketing Channel')
+    
+    elif plot_type == "Daily Sales Trend":
+        data['Date'] = pd.to_datetime(data['Date'])
+        daily_sales = data.groupby('Date')['Total_Sale'].sum()
+        ax.plot(daily_sales.index, daily_sales.values, marker='o')
+        ax.set_title('Daily Sales Trend')
+        ax.set_xlabel('Date')
+        ax.set_ylabel('Total Sales ($)')
+        plt.xticks(rotation=45)
+    
+    elif plot_type == "Customer Age Distribution":
+        sns.histplot(data=data, x='Customer_Age', bins=20, kde=True, ax=ax)
+        ax.set_title('Distribution of Customer Ages')
+        ax.set_xlabel('Age')
+        ax.set_ylabel('Count')
+    
+    elif plot_type == "Gender-wise Category Preference":
+        category_gender = data.groupby(['Category', 'Customer_Gender'])['Quantity'].sum().unstack()
+        category_gender.plot(kind='bar', stacked=True, ax=ax)
+        ax.set_title('Gender-wise Category Preference')
+        ax.set_xlabel('Category')
+        ax.set_ylabel('Quantity Sold')
+        plt.legend(title='Gender')
+        plt.xticks(rotation=45)
+    
+    elif plot_type == "Top 5 Locations by Sales":
+        location_sales = data.groupby('Location')['Total_Sale'].sum().sort_values(ascending=False).head(5)
+        sns.barplot(x=location_sales.index, y=location_sales.values, ax=ax)
+        ax.set_title('Top 5 Locations by Sales')
+        ax.set_xlabel('Location')
+        ax.set_ylabel('Total Sales ($)')
+        plt.xticks(rotation=45)
+    
+    plt.tight_layout()
+    return fig
 
 # Inject custom CSS
 inject_custom_css()
 
-selected_prompt = PROMPTS_VERSION_ONE
+selected_prompt = DATA_ANALYST_PROMPT
 
 # Fetch the temperature if not already fetched
 if 'temperature' not in st.session_state:
