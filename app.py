@@ -98,22 +98,20 @@ if 'agent' not in st.session_state:
     st.session_state.agent = Agent(prompt_text=selected_prompt, agent_type="strategist", Temperature=st.session_state.temperature, llm_model=st.session_state.llm_model)
     st.session_state.selected_prompt = selected_prompt  
 
-# Sidebar for agent selection and displaying configuration
-st.sidebar.title("🌿 Seedbot Settings")
+# Sidebar for configuration
+st.sidebar.title("📊 DataAnalysis Bot Settings")
 
 # Add brief description and links in the sidebar
-st.sidebar.markdown("Seedworld: Immersive AAA metaverse where UGC gaming meets web3 and real-world economies, built by Seedify")
-st.sidebar.markdown("[X (Twitter)](https://x.com/SeedworldMeta)")
-st.sidebar.markdown("[Whitepaper](https://seedworld.gitbook.io/seedworld-wp)")
+st.sidebar.markdown("DataAnalysis Bot: An AI-powered assistant for data visualization and analysis")
+st.sidebar.markdown("[GitHub](https://github.com/yourusername/dataanalysis-bot)")  # Replace with your actual GitHub link
 
-# Display agent configuration in sidebar
+# Display bot configuration in sidebar
 st.sidebar.subheader("🤖 Assistant Configuration")
-#first_sentence = ' '.join(st.session_state.selected_prompt.split('. ')[:1])
-first_sentence = f"""I am Seedbot, your unofficial Seedworld support assistant. I can answer any questions you have about Seedworld’s economy, gameplay, NFTs, nodes, tokens, land ownership, staking, and more, using detailed information from the Seedworld whitepaper."""
+first_sentence = """I am DataAnalysis Bot, your AI-powered data analysis assistant. I can answer questions about the dataset, generate visualizations, and provide insights based on the available data."""
 st.sidebar.write(f"📝 About me: {first_sentence}")
 st.sidebar.write(f"🌡️ Temperature: {st.session_state.temperature}")
 st.sidebar.write(f"🧠 Model: {st.session_state.llm_model}")
-st.sidebar.write("⚠️ Disclaimer: Responses may not be 100% accurate.")
+st.sidebar.write("⚠️ Disclaimer: Responses are based on the provided dataset and may not cover all scenarios.")
 
 
 # Initialize agent_with_chat_history in session state if not already present
@@ -122,7 +120,7 @@ if 'agent_with_chat_history' not in st.session_state:
 
 # Initialize conversation history in session state if not already present
 if "messages" not in st.session_state:
-    st.session_state["messages"] = [{"role": "assistant", "content": "Welcome, gamer! Curious about Seedworld? Ask me anything!"}]
+    st.session_state["messages"] = [{"role": "assistant", "content": "Welcome! Curious about your data? Ask me anything!"}]
 
 if 'current_plot' not in st.session_state:
     st.session_state.current_plot = None
@@ -133,8 +131,8 @@ chat_column, visualization_column = st.columns([0.6, 0.4])
 
 # Main content area (chat interface)
 with chat_column:
-    st.title("🎮 Seedbot")
-    st.markdown("🌐 unofficial Seedworld support assistant built on the top of Seedworld's whitepaper, may not be 100% accurate. Explore Seedworld, one question at a time 🌱")
+    st.title("📊 DataAnalysis Bot")
+    st.markdown("🤖 AI-powered data analysis assistant. Ask questions about the dataset, request visualizations, or seek insights. Responses are based on the provided data and may not cover all scenarios.")
 
     # Create a container for the chat messages
     chat_container = st.container()
@@ -150,7 +148,7 @@ with chat_column:
 
     # Input area for user to type their message
     with input_container:
-        prompt = st.chat_input("Plant your idea here...")
+        prompt = st.chat_input("Ask a question about the data...")
 
     if prompt:
         # Ensure session_id is initialized in session state
@@ -166,7 +164,7 @@ with chat_column:
             {"input": prompt},
             config={"configurable": {"session_id": st.session_state["session_id"]}}
         )
-        agent_name = "🌱 Seedbot"
+        agent_name = "📊 DataAnalysis Bot"
 
         response_text = response.get('output')
 
@@ -176,7 +174,7 @@ with chat_column:
         st.session_state.messages.append({"role": "assistant", "content": response_text})
         with chat_container:
             with st.chat_message("assistant"):
-                st.markdown(f"🌱 Seedbot: {response_text}")
+                st.markdown(f"{agent_name}: {response_text}")
 
     # Add a footer
     st.markdown("---")

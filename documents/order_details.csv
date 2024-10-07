@@ -1,0 +1,21 @@
+Date,Order_ID,Customer_ID,Product_ID,Category,Quantity,Price,Total_Sale,Customer_Age,Customer_Gender,Location,Marketing_Channel
+2023-01-01,1001,C001,P101,Electronics,2,499.99,999.98,35,M,New York,Social Media
+2023-01-01,1002,C002,P205,Clothing,3,59.99,179.97,28,F,Los Angeles,Email
+2023-01-02,1003,C003,P302,Home & Garden,1,149.99,149.99,45,F,Chicago,Search Engine
+2023-01-02,1004,C004,P101,Electronics,1,499.99,499.99,52,M,Houston,Referral
+2023-01-03,1005,C005,P408,Books,4,24.99,99.96,31,F,Miami,Direct
+2023-01-03,1006,C006,P205,Clothing,2,59.99,119.98,42,M,Seattle,Social Media
+2023-01-04,1007,C007,P302,Home & Garden,3,149.99,449.97,39,F,Boston,Email
+2023-01-04,1008,C008,P509,Sports,1,89.99,89.99,26,M,San Francisco,Search Engine
+2023-01-05,1009,C009,P101,Electronics,1,499.99,499.99,48,F,Dallas,Referral
+2023-01-05,1010,C010,P408,Books,2,24.99,49.98,33,M,Phoenix,Direct
+2023-01-06,1011,C011,P509,Sports,3,89.99,269.97,29,F,Denver,Social Media
+2023-01-06,1012,C012,P205,Clothing,1,59.99,59.99,37,M,Atlanta,Email
+2023-01-07,1013,C013,P302,Home & Garden,2,149.99,299.98,51,F,Portland,Search Engine
+2023-01-07,1014,C014,P101,Electronics,1,499.99,499.99,44,M,Las Vegas,Referral
+2023-01-08,1015,C015,P408,Books,5,24.99,124.95,30,F,Austin,Direct
+2023-01-08,1016,C016,P509,Sports,2,89.99,179.98,36,M,San Diego,Social Media
+2023-01-09,1017,C017,P205,Clothing,4,59.99,239.96,27,F,Washington D.C.,Email
+2023-01-09,1018,C018,P302,Home & Garden,1,149.99,149.99,49,M,Philadelphia,Search Engine
+2023-01-10,1019,C019,P101,Electronics,2,499.99,999.98,32,F,Detroit,Referral
+2023-01-10,1020,C020,P408,Books,3,24.99,74.97,41,M,Baltimore,Direct
