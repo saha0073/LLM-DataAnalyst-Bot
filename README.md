@@ -16,13 +16,7 @@ The bot currently uses the `order_details.csv` file located in the 'documents' f
 
 ## 🚀 Try the App
 
-You can test the live app here: [LLM-DataAnalyst-Bot AI Assistant](https://your-app-link-here.streamlit.app/)
-
-## Quick Links
-
-- [GitHub Repository](https://github.com/saha0073/LLM-DataAnalyst-Bot)
-- [Documentation](https://your-documentation-link.com)
-- [Dataset Source](https://your-dataset-source-link.com)
+You can test the live app here: [LLM-DataAnalyst-Bot AI Assistant](https://llm-dataanalyst-bot-hqvahj7kqbilh7mf68n7mg.streamlit.app/)
 
 ## Sample Queries
 
