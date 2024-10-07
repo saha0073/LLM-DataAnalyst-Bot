@@ -11,6 +11,7 @@ import seaborn as sns
 import os
 
 load_dotenv()
+st.set_page_config(layout="wide")
 
 @st.cache_data
 def load_data():
@@ -29,7 +30,7 @@ def load_data():
 df = load_data()
 
 def generate_plot(plot_type, data):
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(8, 6))
     
     if plot_type == "Category Sales":
         category_sales = data.groupby('Category')['Total_Sale'].sum().sort_values(ascending=False)
@@ -123,47 +124,74 @@ if 'agent_with_chat_history' not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant", "content": "Welcome, gamer! Curious about Seedworld? Ask me anything!"}]
 
-st.title("🎮 Seedbot")
-st.markdown("🌐 unofficial Seedworld support assistant built on the top of Seedworld's whitepaper, may not be 100% accurate. Explore Seedworld, one question at a time 🌱")
 
-# Display each message in the chat
-for message in st.session_state["messages"]:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
 
-# Input area for user to type their message
-prompt = st.chat_input("Plant your idea here...")
 
-# Determine the agent descriptor
-agent_descriptor = "🌱 Seedbot"
-#st.markdown(f"<div class='agent-descriptor'>Chatting with {agent_descriptor}</div>", unsafe_allow_html=True)
+# Create two columns with custom widths
+chat_column, visualization_column = st.columns([0.6, 0.4])
 
-if prompt:
-    # Ensure session_id is initialized in session state
-    if "session_id" not in st.session_state:
-        st.session_state["session_id"] = str(uuid.uuid4())
+with chat_column:
+    st.title("🎮 Seedbot")
+    st.markdown("🌐 unofficial Seedworld support assistant built on the top of Seedworld's whitepaper, may not be 100% accurate. Explore Seedworld, one question at a time 🌱")
 
-    # Append user message to the conversation history
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    st.chat_message("user").write(prompt)
+    # Display each message in the chat
+    for message in st.session_state["messages"]:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
 
-    response = st.session_state.agent_with_chat_history.invoke(
-        {"input": prompt},
-        config={"configurable": {"session_id": st.session_state["session_id"]}}
+    # Input area for user to type their message
+    prompt = st.chat_input("Plant your idea here...")
+
+    # Determine the agent descriptor
+    agent_descriptor = "🌱 Seedbot"
+    #st.markdown(f"<div class='agent-descriptor'>Chatting with {agent_descriptor}</div>", unsafe_allow_html=True)
+
+    if prompt:
+        # Ensure session_id is initialized in session state
+        if "session_id" not in st.session_state:
+            st.session_state["session_id"] = str(uuid.uuid4())
+
+        # Append user message to the conversation history
+        st.session_state.messages.append({"role": "user", "content": prompt})
+        st.chat_message("user").write(prompt)
+
+        response = st.session_state.agent_with_chat_history.invoke(
+            {"input": prompt},
+            config={"configurable": {"session_id": st.session_state["session_id"]}}
+        )
+        agent_name = "🌱 Seedbot"
+
+        response_text = response.get('output')
+
+        print(chat_history_manager.chat_histories)
+
+        # Append agent's response to the conversation history
+        st.session_state.messages.append({"role": "assistant", "content": response_text})
+        with st.chat_message("assistant"):
+            st.markdown(f"🌱 Seedbot: {response_text}")
+
+    # Add a footer
+    st.markdown("---")
+
+with visualization_column:
+    st.title("Data Visualization")
+    st.header("Visualization Options")
+
+    # Plot selection
+    plot_type = st.selectbox(
+        "Select a plot type",
+        [
+            "Category Sales", 
+            "Marketing Channels", 
+            "Daily Sales Trend", 
+            "Customer Age Distribution", 
+            "Gender-wise Category Preference", 
+            "Top 5 Locations by Sales"
+        ],
+        key="plot_select"
     )
-    agent_name = "🌱 Seedbot"
 
-    response_text = response.get('output')
-
-    print(chat_history_manager.chat_histories)
-
-    # Append agent's response to the conversation history
-    st.session_state.messages.append({"role": "assistant", "content": response_text})
-    with st.chat_message("assistant"):
-        st.markdown(f"🌱 Seedbot: {response_text}")
-
-# Add a footer
-st.markdown("---")
-#st.markdown("🌐 Exploring the Seedworld metaverse, one question at a time.")
-#st.markdown("⚠️ Disclaimer: This is an unofficial Seedworld assistant built on Seedworld GitBook content. Responses may not always be accurate.")
-
+    # Generate plot button
+    if st.button("Generate Plot", key="generate_plot"):
+        fig = generate_plot(plot_type, df)
+        st.pyplot(fig)

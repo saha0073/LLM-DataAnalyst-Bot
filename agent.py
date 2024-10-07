@@ -15,7 +15,7 @@ class Agent:
         ])
         self.llm = ChatOpenAI(model_name=llm_model, temperature=Temperature, streaming=False)
 
-        self.tools = Tools.setup_tools() 
+        self.tools = Tools.setup_tools_data_analysis() 
         print(agent_type, " : ", self.tools )
 
         self.agent = create_openai_tools_agent(
