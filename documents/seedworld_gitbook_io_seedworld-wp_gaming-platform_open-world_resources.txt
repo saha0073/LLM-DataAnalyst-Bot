@@ -1,5 +1,0 @@
-As mentioned in the previous chapter, collecting resources is one of the key elements of Seedworld. Daily resource collection is a great incentive for players to keep returning to the game, as resources are one of the main sources of players' in-game income—if they want to sell them or use them to craft items to sell them with added value.
-
-Each resource possesses a natural affinity for specific biomes, where it can be readily located. Moreover, these resources exhibit distinct characteristics such as rarity, abundance, collecting efficiency, and many hidden attributes that players can discover.
-
-Resources are initially stored in Land NFTs, which players can acquire on the market. This allows players to possess and trade unique digital assets representing virtual parcels and in-game resources. Last updated1 month ago
