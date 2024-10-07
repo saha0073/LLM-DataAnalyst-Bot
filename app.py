@@ -124,27 +124,33 @@ if 'agent_with_chat_history' not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant", "content": "Welcome, gamer! Curious about Seedworld? Ask me anything!"}]
 
-
+if 'current_plot' not in st.session_state:
+    st.session_state.current_plot = None
 
 
 # Create two columns with custom widths
 chat_column, visualization_column = st.columns([0.6, 0.4])
 
+# Main content area (chat interface)
 with chat_column:
     st.title("🎮 Seedbot")
     st.markdown("🌐 unofficial Seedworld support assistant built on the top of Seedworld's whitepaper, may not be 100% accurate. Explore Seedworld, one question at a time 🌱")
 
+    # Create a container for the chat messages
+    chat_container = st.container()
+
+    # Create a container for the input box
+    input_container = st.container()
+
     # Display each message in the chat
-    for message in st.session_state["messages"]:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+    with chat_container:
+        for message in st.session_state["messages"]:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
 
     # Input area for user to type their message
-    prompt = st.chat_input("Plant your idea here...")
-
-    # Determine the agent descriptor
-    agent_descriptor = "🌱 Seedbot"
-    #st.markdown(f"<div class='agent-descriptor'>Chatting with {agent_descriptor}</div>", unsafe_allow_html=True)
+    with input_container:
+        prompt = st.chat_input("Plant your idea here...")
 
     if prompt:
         # Ensure session_id is initialized in session state
@@ -153,7 +159,8 @@ with chat_column:
 
         # Append user message to the conversation history
         st.session_state.messages.append({"role": "user", "content": prompt})
-        st.chat_message("user").write(prompt)
+        with chat_container:
+            st.chat_message("user").write(prompt)
 
         response = st.session_state.agent_with_chat_history.invoke(
             {"input": prompt},
@@ -167,12 +174,14 @@ with chat_column:
 
         # Append agent's response to the conversation history
         st.session_state.messages.append({"role": "assistant", "content": response_text})
-        with st.chat_message("assistant"):
-            st.markdown(f"🌱 Seedbot: {response_text}")
+        with chat_container:
+            with st.chat_message("assistant"):
+                st.markdown(f"🌱 Seedbot: {response_text}")
 
     # Add a footer
     st.markdown("---")
 
+# Visualization column
 with visualization_column:
     st.title("Data Visualization")
     st.header("Visualization Options")
@@ -194,4 +203,8 @@ with visualization_column:
     # Generate plot button
     if st.button("Generate Plot", key="generate_plot"):
         fig = generate_plot(plot_type, df)
-        st.pyplot(fig)
+        st.session_state.current_plot = fig
+
+    # Display the current plot if it exists
+    if st.session_state.current_plot is not None:
+        st.pyplot(st.session_state.current_plot)
